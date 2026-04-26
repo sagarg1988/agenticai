@@ -16,6 +16,15 @@ Quickstart (local dev)
 6. Run tests:
    pytest
 
+Local LLaMA 3 (Ollama)
+1. Ensure Ollama is running and model exists:
+   ollama pull llama3
+2. Set environment variables:
+   export LLM_PROVIDER=ollama
+   export OLLAMA_BASE_URL=http://127.0.0.1:11434
+   export OLLAMA_MODEL=llama3
+3. Start the app as above (`runserver`, optional `celery`).
+
 Notes:
 - Configure environment variables (POSTGRES_*, OPENAI_API_KEY, WEAVIATE_URL) in .env for real usage.
 - This scaffold is a starting point. See TODO comments in code for production hardening.

@@ -45,4 +45,10 @@ WEAVIATE_API_KEY = os.getenv("WEAVIATE_API_KEY", "")
 EMBEDDING_PROVIDER = os.getenv("EMBEDDING_PROVIDER", "openai")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 
+LLM_PROVIDER = os.getenv("LLM_PROVIDER", "openai")
+OPENAI_CHAT_MODEL = os.getenv("OPENAI_CHAT_MODEL", "gpt-4o-mini")
+OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://127.0.0.1:11434")
+OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "llama3")
+LLM_REQUEST_TIMEOUT = float(os.getenv("LLM_REQUEST_TIMEOUT", "60"))
+
 SENTRY_DSN = os.getenv("SENTRY_DSN", "")
