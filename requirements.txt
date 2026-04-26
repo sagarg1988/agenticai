@@ -1,0 +1,41 @@
+# Core
+Django>=4.2,<5.0
+djangorestframework>=3.14,<4.0
+django-cors-headers>=4.0,<5.0
+python-dotenv>=1.0,<2.0
+
+# Database
+psycopg2-binary>=2.9,<3.0
+
+# Celery
+celery>=5.3,<6.0
+redis>=5.0,<6.0
+
+# LLM / LangGraph
+langchain>=0.1,<0.2
+langgraph>=0.0.30,<0.1
+openai>=1.0,<2.0
+
+# Vector DB (Weaviate)
+weaviate-client>=4.0,<5.0
+
+# Embeddings
+sentence-transformers>=2.2,<3.0
+
+# HTTP utilities
+httpx>=0.25,<0.28
+requests>=2.31,<3.0
+
+# Observability
+structlog>=23.0,<25.0
+
+# Testing
+pytest>=7.4,<9.0
+pytest-django>=4.7,<5.0
+factory-boy>=3.3,<4.0
+
+# Serialization
+pydantic>=2.0,<3.0
+
+# Security
+cryptography>=41.0,<43.0

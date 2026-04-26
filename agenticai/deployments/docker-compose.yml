@@ -1,0 +1,29 @@
+version: "3.9"
+
+# Deployment-specific overrides for production.
+# Usage: docker-compose -f docker-compose.yml -f agenticai/deployments/docker-compose.yml up
+#
+# TODO:
+# - Replace hard-coded passwords with Docker secrets or a secrets manager.
+# - Add a reverse proxy (nginx / Traefik) with TLS termination.
+# - Configure resource limits (cpus, memory) for each service.
+
+services:
+  web:
+    restart: always
+    command: gunicorn aiagent.wsgi:application --bind 0.0.0.0:8000 --workers 4 --worker-class gevent
+    environment:
+      DEBUG: "False"
+
+  celery:
+    restart: always
+    command: celery -A aiagent worker -l warning --concurrency 4
+
+  db:
+    restart: always
+
+  redis:
+    restart: always
+
+  weaviate:
+    restart: always
