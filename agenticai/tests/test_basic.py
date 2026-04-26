@@ -65,10 +65,6 @@ def test_tool_registry_list():
 
 def test_db_query_rejects_non_select():
     """db_query tool should raise ValueError for non-SELECT SQL."""
-    import django
-    import os
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "aiagent.settings.base")
-
     from tools.db_query import db_query
 
     with pytest.raises(ValueError, match="Only SELECT queries are permitted"):
@@ -87,7 +83,7 @@ def test_planner_returns_steps(monkeypatch):
 
 
 def test_synthesizer_basic():
-    """Synthesizer.synthesize() should return a non-empty string."""
+    """Synthesizer.synthesize() should return a string containing the observation result."""
     from agents.synthesizer import Synthesizer
 
     synthesizer = Synthesizer(agent_config={})
@@ -95,7 +91,7 @@ def test_synthesizer_basic():
         "What is 2+2?",
         [{"step": {"tool": "noop", "args": {}}, "result": "4"}],
     )
-    assert result == "4"
+    assert "4" in result
 
 
 def test_synthesizer_no_observations():

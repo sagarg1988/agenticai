@@ -54,8 +54,16 @@ def http_api(
             json=json,
             params=params or {},
         )
+    content_type = response.headers.get("content-type", "")
+    if "application/json" in content_type:
+        try:
+            body = response.json()
+        except Exception:  # noqa: BLE001
+            body = response.text
+    else:
+        body = response.text
     return {
         "status_code": response.status_code,
         "headers": dict(response.headers),
-        "body": response.json() if "application/json" in response.headers.get("content-type", "") else response.text,
+        "body": body,
     }
