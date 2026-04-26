@@ -43,7 +43,18 @@ services:
       - redis
       - weaviate
 
+  celery:
+    build: .
+    command: celery -A aiagent worker -l info
+    environment:
+      - POSTGRES_HOST=db
+      - REDIS_URL=redis://redis:6379/0
+      - WEAVIATE_URL=http://weaviate:8080
+    depends_on:
+      - db
+      - redis
+      - weaviate
+
 volumes:
   db_data:
   weaviate_data:
-docker-compose: true

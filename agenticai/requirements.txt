@@ -2,9 +2,11 @@ Django>=4.2
 djangorestframework>=3.14
 psycopg2-binary
 redis
+django-redis
 celery[redis]
+gunicorn
 weaviate-client>=4.0.0
-openai>=0.27.0
+openai>=1.40.0
 tenacity
 pydantic
 requests
@@ -14,9 +16,7 @@ sentry-sdk
 prometheus-client
 httpx
 pytest
-openai>=1.40.0
 langchain-openai>=0.1.0
 langchain>=0.2.0
 langchain-ollama>=0.1.0
-
 

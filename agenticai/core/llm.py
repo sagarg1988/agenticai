@@ -1,7 +1,7 @@
 import os
 import json
 import httpx
-import openai
+from openai import OpenAI
 
 
 class LLMProvider:
@@ -13,7 +13,7 @@ class LLMProvider:
         self.request_timeout = float(os.getenv("LLM_REQUEST_TIMEOUT", "60"))
 
         if self.provider == "openai":
-            openai.api_key = os.getenv("OPENAI_API_KEY")
+            self._openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
     def generate(self, prompt, **kwargs):
         if self.provider == "ollama":
@@ -23,7 +23,7 @@ class LLMProvider:
         raise ValueError(f"Unsupported LLM provider: {self.provider}")
 
     def _generate_openai(self, prompt, **kwargs):
-        resp = openai.ChatCompletion.create(
+        resp = self._openai_client.chat.completions.create(
             model=kwargs.get("model", self.openai_model),
             messages=[
                 {"role": "system", "content": "You are an assistant."},
@@ -32,7 +32,7 @@ class LLMProvider:
             temperature=kwargs.get("temperature", 0.2),
             max_tokens=kwargs.get("max_tokens", 512),
         )
-        return resp["choices"][0]["message"]["content"]
+        return resp.choices[0].message.content
 
     def _generate_ollama(self, prompt, **kwargs):
         payload = {
