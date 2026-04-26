@@ -87,7 +87,7 @@ class Command(BaseCommand):
                         "assistant",
                         "Vector search converts text into dense embeddings and "
                         "retrieves semantically similar results using approximate "
-                        "nearest-neighbour algorithms.",
+                        "nearest-neighbor algorithms.",
                     ),
                     ("user", "Which vector databases exist?"),
                     (

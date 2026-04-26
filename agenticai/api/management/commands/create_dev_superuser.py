@@ -41,10 +41,10 @@ class Command(BaseCommand):
             self.style.SUCCESS(
                 f"\n--- Dev Credentials ---\n"
                 f"  Username : {username}\n"
-                f"  Password : {password}\n"
+                f"  Password : (set via DJANGO_SUPERUSER_PASSWORD env var)\n"
                 f"  API Token: {token.key}\n"
                 f"\nObtain a token via:\n"
-                f"  POST /api/token/  {{\"username\": \"{username}\", \"password\": \"{password}\"}}\n"
+                f"  POST /api/token/  {{\"username\": \"{username}\", \"password\": \"<password>\"}}\n"
                 f"\nUse the token in subsequent requests:\n"
                 f"  Authorization: Token {token.key}\n"
             )

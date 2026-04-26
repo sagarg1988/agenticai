@@ -36,6 +36,9 @@ services:
       - POSTGRES_HOST=db
       - REDIS_URL=redis://redis:6379/0
       - WEAVIATE_URL=http://weaviate:8080
+      # Set to "true" to auto-create the dev superuser and seed example data
+      # on container start. Remove or set to "false" in production.
+      - RUN_DEV_SETUP=true
     ports:
       - "8000:8000"
     depends_on:
