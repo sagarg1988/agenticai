@@ -1,0 +1,1 @@
+# aiagent Django application config
