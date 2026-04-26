@@ -1,0 +1,40 @@
+# Core Django
+Django>=4.2,<5.0
+djangorestframework>=3.14
+django-cors-headers>=4.3
+
+# Async / Task queue
+celery>=5.3
+redis>=5.0
+
+# LangGraph / LangChain
+langgraph>=0.0.26
+langchain>=0.1.0
+langchain-openai>=0.0.5
+langchain-community>=0.0.20
+
+# Vector store (Weaviate)
+weaviate-client>=4.4
+
+# Embeddings / ML
+openai>=1.12
+tiktoken>=0.6
+
+# HTTP
+httpx>=0.27
+requests>=2.31
+
+# Database
+psycopg2-binary>=2.9
+
+# Observability
+structlog>=24.1
+
+# Testing
+pytest>=8.0
+pytest-django>=4.7
+factory_boy>=3.3
+
+# Dev utilities
+python-dotenv>=1.0
+gunicorn>=21.2

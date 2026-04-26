@@ -1,0 +1,64 @@
+version: "3.9"
+# Deployment-specific docker-compose — extends the root docker-compose.yml
+# with production-grade overrides.
+#
+# TODO: remove port exposures for internal services (db, redis, weaviate) in prod.
+# TODO: add TLS termination via a reverse proxy (nginx / Traefik).
+# TODO: use Docker secrets or a vault integration for all passwords.
+
+services:
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-agenticai}
+      POSTGRES_USER: ${POSTGRES_USER:-agenticai}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change_me_in_prod}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+
+  weaviate:
+    image: semitechnologies/weaviate:1.24.1
+    environment:
+      QUERY_DEFAULTS_LIMIT: 25
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: "true"
+      PERSISTENCE_DATA_PATH: /var/lib/weaviate
+      DEFAULT_VECTORIZER_MODULE: none
+    volumes:
+      - weaviate_data:/var/lib/weaviate
+    restart: unless-stopped
+
+  web:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    command: gunicorn agenticai.aiagent.wsgi:application --bind 0.0.0.0:8000 --workers 4
+    ports:
+      - "8000:8000"
+    env_file:
+      - ../.env
+    depends_on:
+      - db
+      - redis
+      - weaviate
+    restart: unless-stopped
+
+  celery_worker:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    command: celery -A agenticai.celery_tasks worker --loglevel=info --concurrency=4
+    env_file:
+      - ../.env
+    depends_on:
+      - db
+      - redis
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  weaviate_data:
