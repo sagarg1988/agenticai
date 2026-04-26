@@ -1,24 +1,7 @@
-from urllib.parse import urlparse
-
-import weaviate
 import weaviate.classes as wvc
 from django.conf import settings
 
-
-def _connect():
-    parsed = urlparse(settings.WEAVIATE_URL)
-    host = parsed.hostname or "weaviate"
-    port = parsed.port or 8080
-    secure = parsed.scheme == "https"
-    return weaviate.connect_to_custom(
-        http_host=host,
-        http_port=port,
-        http_secure=secure,
-        grpc_host=host,
-        grpc_port=50051,
-        grpc_secure=False,
-        skip_init_checks=True,
-    )
+from rag.weaviate_client import get_weaviate_client
 
 
 class MemoryRetriever:
@@ -29,7 +12,7 @@ class MemoryRetriever:
         from rag.embeddings import EmbeddingProvider
         emb = EmbeddingProvider().embed_text(query)
         try:
-            with _connect() as client:
+            with get_weaviate_client() as client:
                 collection = client.collections.get(self.class_name)
                 response = collection.query.near_vector(
                     near_vector=emb,

@@ -1,27 +1,10 @@
 import uuid
-from urllib.parse import urlparse
 
-import weaviate
 import weaviate.classes as wvc
 from django.conf import settings
 
 from .embeddings import EmbeddingProvider
-
-
-def _connect():
-    parsed = urlparse(settings.WEAVIATE_URL)
-    host = parsed.hostname or "weaviate"
-    port = parsed.port or 8080
-    secure = parsed.scheme == "https"
-    return weaviate.connect_to_custom(
-        http_host=host,
-        http_port=port,
-        http_secure=secure,
-        grpc_host=host,
-        grpc_port=50051,
-        grpc_secure=False,
-        skip_init_checks=True,
-    )
+from .weaviate_client import get_weaviate_client
 
 
 def chunk_text(text, chunk_size=1000, overlap=200):
@@ -39,7 +22,7 @@ def ingest_document(title, text, metadata):
     emb = EmbeddingProvider()
     cls = "Memory"
     chunks = chunk_text(text)
-    with _connect() as client:
+    with get_weaviate_client() as client:
         # Ensure the collection exists (skip creation if already present)
         if not client.collections.exists(cls):
             client.collections.create(
