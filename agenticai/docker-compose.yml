@@ -45,6 +45,7 @@ services:
 
   celery:
     build: .
+    entrypoint: []
     command: celery -A aiagent worker -l info
     environment:
       - POSTGRES_HOST=db
