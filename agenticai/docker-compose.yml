@@ -1,0 +1,49 @@
+version: "3.8"
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: aiagent
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+  weaviate:
+    image: semitechnologies/weaviate:1.19.3
+    environment:
+      - QUERY_DEFAULTS_LIMIT=20
+      - AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED=true
+      - PERSISTENCE_DATA_PATH=/var/lib/weaviate
+      - DEFAULT_VECTORIZER_MODULE=none
+    ports:
+      - "8080:8080"
+    volumes:
+      - weaviate_data:/var/lib/weaviate
+
+  web:
+    build: .
+    command: gunicorn aiagent.wsgi:application --bind 0.0.0.0:8000
+    environment:
+      - DJANGO_DEBUG=true
+      - POSTGRES_HOST=db
+      - REDIS_URL=redis://redis:6379/0
+      - WEAVIATE_URL=http://weaviate:8080
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+      - weaviate
+
+volumes:
+  db_data:
+  weaviate_data:
+docker-compose: true
